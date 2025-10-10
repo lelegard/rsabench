@@ -1,37 +1,37 @@
 CRYPTOGRAPHIC OPERATIONS PER SECOND
 
-CPU core                      Apple M1
-Frequency                     3.20 GHz
-OpenSSL                          3.6.0
----------------------   --------------
-RSA-2048 oaep-encrypt   63,644,363 (1)
-RSA-2048 oaep-decrypt    1,777,523 (1)
-RSA-2048 pss-sign        1,784,400 (1)
-RSA-2048 pss-verify     68,455,516 (1)
-RSA-3072 oaep-encrypt   31,416,198 (1)
-RSA-3072 oaep-decrypt      617,236 (1)
-RSA-3072 pss-sign          618,050 (1)
-RSA-3072 pss-verify     32,487,222 (1)
-RSA-4096 oaep-encrypt   18,552,003 (1)
-RSA-4096 oaep-decrypt      283,203 (1)
-RSA-4096 pss-sign          283,573 (1)
-RSA-4096 pss-verify     18,994,192 (1)
+CPU core                    Xeon M9460         Apple M1
+Frequency                     3.50 GHz         3.20 GHz
+OpenSSL                          3.2.2            3.6.0
+---------------------   --------------   --------------
+RSA-2048 oaep-encrypt   53,305,815 (2)   63,644,363 (1)
+RSA-2048 oaep-decrypt    3,391,618 (1)    1,777,523 (2)
+RSA-2048 pss-sign        3,420,925 (1)    1,784,400 (2)
+RSA-2048 pss-verify     56,287,551 (2)   68,455,516 (1)
+RSA-3072 oaep-encrypt   25,980,713 (2)   31,416,198 (1)
+RSA-3072 oaep-decrypt    1,267,427 (1)      617,236 (2)
+RSA-3072 pss-sign        1,271,346 (1)      618,050 (2)
+RSA-3072 pss-verify     26,868,266 (2)   32,487,222 (1)
+RSA-4096 oaep-encrypt   15,251,560 (2)   18,552,003 (1)
+RSA-4096 oaep-decrypt      626,343 (1)      283,203 (2)
+RSA-4096 pss-sign          628,972 (1)      283,573 (2)
+RSA-4096 pss-verify     15,599,719 (2)   18,994,192 (1)
 
-CRYPTOGRAPHIC OPERATIONS PER 1000000 PROCESSOR CYCLES
+CRYPTOGRAPHIC OPERATIONS PER 1,000,000 PROCESSOR CYCLES
 
-CPU core                      Apple M1
-Frequency                     3.20 GHz
-OpenSSL                          3.6.0
----------------------   --------------
-RSA-2048 oaep-encrypt       19,888 (1)
-RSA-2048 oaep-decrypt          555 (1)
-RSA-2048 pss-sign              557 (1)
-RSA-2048 pss-verify         21,392 (1)
-RSA-3072 oaep-encrypt        9,817 (1)
-RSA-3072 oaep-decrypt          192 (1)
-RSA-3072 pss-sign              193 (1)
-RSA-3072 pss-verify         10,152 (1)
-RSA-4096 oaep-encrypt        5,797 (1)
-RSA-4096 oaep-decrypt         88.5 (1)
-RSA-4096 pss-sign             88.6 (1)
-RSA-4096 pss-verify          5,935 (1)
+CPU core                    Xeon M9460         Apple M1
+Frequency                     3.50 GHz         3.20 GHz
+OpenSSL                          3.2.2            3.6.0
+---------------------   --------------   --------------
+RSA-2048 oaep-encrypt       15,230 (2)       19,888 (1)
+RSA-2048 oaep-decrypt          969 (1)          555 (2)
+RSA-2048 pss-sign              977 (1)          557 (2)
+RSA-2048 pss-verify         16,082 (2)       21,392 (1)
+RSA-3072 oaep-encrypt        7,423 (2)        9,817 (1)
+RSA-3072 oaep-decrypt          362 (1)          192 (2)
+RSA-3072 pss-sign              363 (1)          193 (2)
+RSA-3072 pss-verify          7,676 (2)       10,152 (1)
+RSA-4096 oaep-encrypt        4,357 (2)        5,797 (1)
+RSA-4096 oaep-decrypt          178 (1)         88.5 (2)
+RSA-4096 pss-sign              179 (1)         88.6 (2)
+RSA-4096 pss-verify          4,457 (2)        5,935 (1)

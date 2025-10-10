@@ -213,12 +213,12 @@ def display_one_table(results, algos, headers, value_name, file, colsep=SEPARATO
 # @param [in] colsep Separator between columns.
 #
 def display_tables(results, algos, headers, file, colsep=SEPARATOR):
-    unit = 'SECOND' if REF_SECONDS == 1 else '%d SECONDS' % REF_SECONDS
+    unit = 'SECOND' if REF_SECONDS == 1 else '{:,} SECONDS'.format(REF_SECONDS)
     print('CRYPTOGRAPHIC OPERATIONS PER %s' % unit, file=file)
     print('', file=file)
     display_one_table(results, algos, headers, 'oprate', file, colsep)
     print('', file=file)
-    unit = 'PROCESSOR CYCLE' if REF_CYCLES == 1 else '%d PROCESSOR CYCLES' % REF_CYCLES
+    unit = 'PROCESSOR CYCLE' if REF_CYCLES == 1 else '{:,} PROCESSOR CYCLES'.format(REF_CYCLES)
     print('CRYPTOGRAPHIC OPERATIONS PER %s' % unit, file=file)
     print('', file=file)
     display_one_table(results, algos, headers, 'opcycle', file, colsep)
