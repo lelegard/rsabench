@@ -265,9 +265,11 @@ void one_test(const char* private_key_file, const char* public_key_file, const E
         fatal("error in EVP_PKEY_CTX_set_signature_md");
     }
 
-    std::cout << "pss-digest-size: " << (8 * EVP_MD_get_size(evp_pss_hash)) << std::endl;
+    const size_t digest_size = EVP_MD_get_size(evp_pss_hash);
+    std::cout << "pss-digest-size: " << (8 * digest_size) << std::endl;
 
     // Signature test.
+    std::vector<uint8_t> to_be_signed(digest_size, 0x5A);
     std::vector<uint8_t> signature(1024);
     size_t signature_len = 0;
     count = 0;
@@ -278,8 +280,7 @@ void one_test(const char* private_key_file, const char* public_key_file, const E
     do {
         for (size_t i = 0; i < INNER_LOOP_COUNT; i++) {
             signature_len = signature.size();
-            std::cout << "@@@ signing" << std::endl;
-            if (EVP_PKEY_sign(ctx, signature.data(), &signature_len, input.data(), input.size()) <= 0) {
+            if (EVP_PKEY_sign(ctx, signature.data(), &signature_len, to_be_signed.data(), to_be_signed.size()) <= 0) {
                 fatal("RSA sign error");
             }
             size += input.size();
@@ -316,7 +317,7 @@ void one_test(const char* private_key_file, const char* public_key_file, const E
     do {
         for (size_t i = 0; i < INNER_LOOP_COUNT; i++) {
             // Status: 1=verified, 0=not verified, <0 = error
-            const int res = EVP_PKEY_verify(ctx, signature.data(), signature_len, input.data(), input.size());
+            const int res = EVP_PKEY_verify(ctx, signature.data(), signature_len, to_be_signed.data(), to_be_signed.size());
             if (res <= 0) {
                 fatal("RSA verify error");
             }
