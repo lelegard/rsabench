@@ -2,13 +2,13 @@
 
 This project runs RSA tests on various CPU's using the OpenSSL cryptographic library.
 
-Note: equivalent [aesbench](https://github.com/lelegard/aesbench) and
-[shabench](https://github.com/lelegard/shabench) projects exist for AES
-and SHA hash functions.
-
 The tested key sizes are 2048, 3072, and 4096 bits.
 
 Encryptions use OAEP padding. Signatures use PSS padding.
+
+Note: equivalent [aesbench](https://github.com/lelegard/aesbench) and
+[shabench](https://github.com/lelegard/shabench) projects exist for AES
+and SHA hash functions.
 
 ## Performance results
 
