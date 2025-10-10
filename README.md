@@ -1,14 +1,30 @@
 # RSA Benchmarks
 
-This project runs hash tests on various CPU's using the OpenSSL cryptographic library.
+This project runs RSA tests on various CPU's using the OpenSSL cryptographic library.
 
 Note: equivalent [aesbench](https://github.com/lelegard/aesbench) and
 [shabench](https://github.com/lelegard/shabench) projects exist for AES
 and SHA hash functions.
 
+The tested key sizes are 2048, 3072, and 4096 bits.
+
+Encryptions use OAEP padding. Signatures use PSS padding.
+
 ## Performance results
 
-TBC
+The performances are displayed and sorted in number of operations: encryption,
+decryption, signature generation or verification.
+
+The results are summarized in file [RESULTS.txt](RESULTS.txt).
+It is generated using the Python script `analyze.py`.
+
+Two tables are provided:
+
+- Number of operations per second.
+- Number of operations per CPU cycle. This metrics is independent of the
+  CPU frequency and demonstrates the quality of implementation.
+
+In each table, the ranking of each CPU in the line is added between brackets.
 
 ## RSA key pairs generation
 
