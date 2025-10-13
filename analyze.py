@@ -9,9 +9,6 @@
 
 import re, os, sys, pprint
 
-GIGA = 1000000000.0
-SEPARATOR = '   '
-
 #
 # List of CPU cores and corresponding result files.
 #
@@ -38,6 +35,7 @@ RESULTS = [
 # Column headers.
 #
 HEADERS = {'cpu': 'CPU core', 'freq': 'Frequency', 'openssl': 'OpenSSL'}
+SEPARATOR = '   '
 
 #
 # With asymmetric crypto, we count the number of "operations" (encrypt, decrypt, sign,
@@ -46,7 +44,7 @@ HEADERS = {'cpu': 'CPU core', 'freq': 'Frequency', 'openssl': 'OpenSSL'}
 # operations per REF_SECONDS and per REF_CYCLES.
 #
 REF_SECONDS = 1
-REF_CYCLES  = 1000000
+REF_CYCLES  = 1000000000
 
 #
 # Names of cryptographic operations, names of values to display.
@@ -123,9 +121,9 @@ def load_results(results, input_dir):
                     elif value == 'microsec' and algo is not None:
                         microsec = float(line[1])
                     elif value == 'count' and algo is not None:
-                        count = float(line[1])                        
-                        oprate = (REF_SECONDS * GIGA * count) / microsec
-                        opcycle = (REF_CYCLES * count) / (microsec * res['frequency'])
+                        count = float(line[1])
+                        oprate = (REF_SECONDS * 1000000 * count) / microsec
+                        opcycle = (REF_CYCLES * count) / (1000 * microsec * res['frequency'])
                         data = res['data'][algo][op]
                         data['oprate']['value'] = oprate
                         data['oprate']['string'] = format_num(oprate)
