@@ -13,28 +13,29 @@ import re, os, sys, pprint
 # List of CPU cores and corresponding result files.
 #
 RESULTS = [
-    {'cpu': 'i7-8565U',    'frequency': 4.20, 'file': 'intel-i7-8565U-linux-vm.txt'},
-    {'cpu': 'i7-13700H',   'frequency': 5.00, 'file': 'intel-i7-13700H-linux-vm.txt'},
-    {'cpu': 'Xeon G6242R', 'frequency': 3.10, 'file': 'intel-xeon-gold-6242r-linux.txt'},
-    {'cpu': 'Xeon G6348',  'frequency': 2.60, 'file': 'intel-xeon-gold-6348-linux.txt'},
-    {'cpu': 'Xeon M9460',  'frequency': 3.50, 'file': 'intel-xeon-max-9460-linux.txt'},
-    {'cpu': 'EPYC 7543P',  'frequency': 3.70, 'file': 'amd-epyc-7543p-linux.txt'},
-    {'cpu': 'EPYC 9534',   'frequency': 3.70, 'file': 'amd-epyc-9534-linux.txt'},
-    {'cpu': 'Cortex A53',  'frequency': 1.20, 'file': 'arm-rpi3-cortex-a53-linux.txt'},
-    {'cpu': 'Cortex A72',  'frequency': 1.80, 'file': 'arm-rpi4-cortex-a72-linux.txt'},
-    {'cpu': 'Neoverse N1', 'frequency': 3.00, 'file': 'arm-ampere-neoverse-n1-30-linux.txt'},
-    {'cpu': 'Neoverse N1', 'frequency': 3.30, 'file': 'arm-ampere-neoverse-n1-33-linux.txt'},
-    {'cpu': 'Neoverse V1', 'frequency': 2.60, 'file': 'arm-graviton3-neoverse-v1-linux-vm.txt'},
-    {'cpu': 'Neoverse V2', 'frequency': 3.30, 'file': 'arm-grace-neoverse-v2-linux.txt'},
-    {'cpu': 'Apple M1',    'frequency': 3.20, 'file': 'arm-apple-m1-macos.txt'},
-    {'cpu': 'Apple M3',    'frequency': 4.00, 'file': 'arm-apple-m3-macos.txt'},
-    {'cpu': 'Apple M4',    'frequency': 4.40, 'file': 'arm-apple-m4-macos.txt'}
+    {'cpu': 'i7-8565U',     'core': 'Whiskey Lake', 'frequency': 4.20, 'file': 'intel-i7-8565U-linux-vm.txt'},
+    {'cpu': 'i7-13700H',    'core': 'Raptor Lake',  'frequency': 5.00, 'file': 'intel-i7-13700H-linux-vm.txt'},
+    {'cpu': 'Xeon G6242R',  'core': 'Cascade Lake', 'frequency': 3.10, 'file': 'intel-xeon-gold-6242r-linux.txt'},
+    {'cpu': 'Xeon G6348',   'core': 'Ice Lake',     'frequency': 2.60, 'file': 'intel-xeon-gold-6348-linux.txt'},
+    {'cpu': 'Xeon M9460',   'core': 'Sapphire Rpd', 'frequency': 3.50, 'file': 'intel-xeon-max-9460-linux.txt'},
+    {'cpu': 'EPYC 7543P',   'core': 'Milan',        'frequency': 3.70, 'file': 'amd-epyc-7543p-linux.txt'},
+    {'cpu': 'EPYC 9534',    'core': 'Genoa',        'frequency': 3.70, 'file': 'amd-epyc-9534-linux.txt'},
+    {'cpu': 'Rasp. Pi 3',   'core': 'Cortex A53',   'frequency': 1.20, 'file': 'arm-rpi3-cortex-a53-linux.txt'},
+    {'cpu': 'Rasp. Pi 4',   'core': 'Cortex A72',   'frequency': 1.80, 'file': 'arm-rpi4-cortex-a72-linux.txt'},
+    {'cpu': 'Ampere Altra', 'core': 'Neoverse N1',  'frequency': 3.00, 'file': 'arm-ampere-neoverse-n1-30-linux.txt'},
+    {'cpu': 'Ampere Altra', 'core': 'Neoverse N1',  'frequency': 3.30, 'file': 'arm-ampere-neoverse-n1-33-linux.txt'},
+    {'cpu': 'Graviton 3',   'core': 'Neoverse V1',  'frequency': 2.60, 'file': 'arm-graviton3-neoverse-v1-linux-vm.txt'},
+    {'cpu': 'Nvidia Grace', 'core': 'Neoverse V2',  'frequency': 3.30, 'file': 'arm-grace-neoverse-v2-linux.txt'},
+    {'cpu': 'Apple M1',     'core': 'M1',           'frequency': 3.20, 'file': 'arm-apple-m1-macos.txt'},
+    {'cpu': 'Apple M2',     'core': 'M2',           'frequency': 3.49, 'file': 'arm-apple-m2-macos.txt'},
+    {'cpu': 'Apple M3',     'core': 'M3',           'frequency': 4.05, 'file': 'arm-apple-m3-macos.txt'},
+    {'cpu': 'Apple M4',     'core': 'M4',           'frequency': 4.40, 'file': 'arm-apple-m4-macos.txt'}
 ]
 
 #
 # Column headers.
 #
-HEADERS = {'cpu': 'CPU core', 'freq': 'Frequency', 'openssl': 'OpenSSL'}
+HEADERS = {'cpu': 'CPU', 'core': 'CPU core', 'freq': 'Frequency', 'openssl': 'OpenSSL'}
 SEPARATOR = '   '
 
 #
@@ -130,11 +131,35 @@ def load_results(results, input_dir):
                         data['opcycle']['value'] = opcycle
                         data['opcycle']['string'] = format_num(opcycle)
 
+    # Remove operations without results (eg. sign with KEM algo).
+    for algo in algos:
+        for op in OP_NAMES:
+            empty = True
+            for res in results:
+                if algo in res['data']:
+                    data = res['data'][algo][op]
+                    for value in VALUE_NAMES:
+                        if data[value]['string'] != '':
+                            empty = False
+                            break
+                else:
+                    res['data'][algo] = dict()
+                    for op1 in OP_NAMES:
+                        res['data'][algo][op1] = dict()
+                        for value in VALUE_NAMES:
+                            res['data'][algo][op1][value] = {'value': 0.0, 'string': '', 'rank': 0}
+                if not empty:
+                    break;
+            if empty:
+                for res in results:
+                    del(res['data'][algo][op])
+
     # Build rankings for each operation.
     for algo in algos:
         for op in OP_NAMES:
             for value in VALUE_NAMES:
-                dlist = [(res['index'], res['data'][algo][op][value]['value']) for res in results]
+                dlist = [(res['index'], res['data'][algo][op][value]['value'])
+                         for res in results if op in res['data'][algo] and res['data'][algo][op][value]['value'] > 0]
                 dlist.sort(key=lambda x: x[1], reverse=True)
                 for rank in range(len(dlist)):
                     res = next(r for r in results if r['index'] == dlist[rank][0])
@@ -146,19 +171,22 @@ def load_results(results, input_dir):
             res['ranks'][value] = {'min': 1000, 'max': 0}
         for algo in algos:
             for op in OP_NAMES:
-                for value in VALUE_NAMES:
-                    data = res['data'][algo][op][value]
-                    res['ranks'][value]['min'] = min(res['ranks'][value]['min'], data['rank'])
-                    res['ranks'][value]['max'] = max(res['ranks'][value]['max'], data['rank'])
+                if op in res['data'][algo]:
+                    for value in VALUE_NAMES:
+                        data = res['data'][algo][op][value]
+                        res['ranks'][value]['min'] = min(res['ranks'][value]['min'], data['rank'])
+                        res['ranks'][value]['max'] = max(res['ranks'][value]['max'], data['rank'])
         for algo in algos:
             for op in OP_NAMES:
-                for value in VALUE_NAMES:
-                    data = res['data'][algo][op][value]
-                    space = ' '
-                    if res['ranks'][value]['min'] < 10 and res['ranks'][value]['max'] >= 10 and data['rank'] < 10:
-                        space = '  '
-                    data['string'] += '%s(%d)' % (space, data['rank'])
-                    res['width'] = max(res['width'], len(data['string']))
+                if op in res['data'][algo]:
+                    for value in VALUE_NAMES:
+                        if res['data'][algo][op][value]['value'] > 0:
+                            data = res['data'][algo][op][value]
+                            space = ' '
+                            if res['ranks'][value]['min'] < 10 and res['ranks'][value]['max'] >= 10 and data['rank'] < 10:
+                                space = '  '
+                            data['string'] += '%s(%d)' % (space, data['rank'])
+                            res['width'] = max(res['width'], len(data['string']))
 
     # End of analysis, return the list of algos.
     return algos
@@ -193,13 +221,14 @@ def display_one_table(results, algos, headers, value_name, file, colsep=SEPARATO
     # Output one line per operation.
     for algo in algos:
         for op in OP_NAMES:
-            line = (algo + ' ' + op).ljust(w0)
-            for res in results:
-                if algo in res['data'] and op in res['data'][algo]:
-                    line += colsep + res['data'][algo][op][value_name]['string'].rjust(res['_width'])
-                else:
-                    line += colsep + res['_width'] * ' '
-            print(line.rstrip(), file=file)
+            if op in res['data'][algo]:
+                line = (algo + ' ' + op).ljust(w0)
+                for res in results:
+                    if algo in res['data'] and op in res['data'][algo]:
+                        line += colsep + res['data'][algo][op][value_name]['string'].rjust(res['_width'])
+                    else:
+                        line += colsep + res['_width'] * ' '
+                print(line.rstrip(), file=file)
 
 ##
 # Generate the final text file.

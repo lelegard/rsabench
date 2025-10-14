@@ -6,9 +6,11 @@ The tested key sizes are 2048, 3072, and 4096 bits.
 
 Encryptions use OAEP padding. Signatures use PSS padding.
 
-Note: equivalent [aesbench](https://github.com/lelegard/aesbench) and
-[shabench](https://github.com/lelegard/shabench) projects exist for AES
-and SHA hash functions.
+Note: this project is part of a series of cryptographic benchmarks:
+- [aesbench](https://github.com/lelegard/aesbench) for AES
+- [shabench](https://github.com/lelegard/shabench) for SHA-x hash functions
+- [rsabench](https://github.com/lelegard/rsabench) for RSA
+- [pqcbench](https://github.com/lelegard/pqcbench) for PQC (ML-KEM, ML-DSA, SLH-DSA)
 
 ## Performance results
 
