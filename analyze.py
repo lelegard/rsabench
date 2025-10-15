@@ -24,6 +24,7 @@ RESULTS = [
     {'cpu': 'Rasp. Pi 4',   'core': 'Cortex A72',   'frequency': 1.80, 'file': 'arm-rpi4-cortex-a72-linux.txt'},
     {'cpu': 'Ampere Altra', 'core': 'Neoverse N1',  'frequency': 3.00, 'file': 'arm-ampere-neoverse-n1-30-linux.txt'},
     {'cpu': 'Ampere Altra', 'core': 'Neoverse N1',  'frequency': 3.30, 'file': 'arm-ampere-neoverse-n1-33-linux.txt'},
+    {'cpu': 'Cobalt 100',   'core': 'Neoverse N2',  'frequency': 3.40, 'file': 'arm-cobalt100-neoverse-n2-linux.txt'},
     {'cpu': 'Graviton 3',   'core': 'Neoverse V1',  'frequency': 2.60, 'file': 'arm-graviton3-neoverse-v1-linux-vm.txt'},
     {'cpu': 'Nvidia Grace', 'core': 'Neoverse V2',  'frequency': 3.30, 'file': 'arm-grace-neoverse-v2-linux.txt'},
     {'cpu': 'Apple M1',     'core': 'M1',           'frequency': 3.20, 'file': 'arm-apple-m1-macos.txt'},
