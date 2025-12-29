@@ -13,25 +13,25 @@ import re, os, sys, pprint
 # List of CPU cores and corresponding result files.
 #
 RESULTS = [
-    {'cpu': 'i7-8565U',     'core': 'Whiskey Lake', 'frequency': 4.20, 'file': 'intel-i7-8565U-linux-vm.txt'},
-    {'cpu': 'i7-13700H',    'core': 'Raptor Lake',  'frequency': 5.00, 'file': 'intel-i7-13700H-linux-vm.txt'},
-    {'cpu': 'Ryzen 7 350',  'core': 'Kraken Point', 'frequency': 5.00, 'file': 'amd-ryzen-ai-7-350-linux-vm.txt'},
-    {'cpu': 'Xeon G6242R',  'core': 'Cascade Lake', 'frequency': 3.10, 'file': 'intel-xeon-gold-6242r-linux.txt'},
-    {'cpu': 'Xeon G6348',   'core': 'Ice Lake',     'frequency': 2.60, 'file': 'intel-xeon-gold-6348-linux.txt'},
-    {'cpu': 'Xeon M9460',   'core': 'Sapphire Rpd', 'frequency': 3.50, 'file': 'intel-xeon-max-9460-linux.txt'},
-    {'cpu': 'EPYC 7543P',   'core': 'Milan',        'frequency': 3.70, 'file': 'amd-epyc-7543p-linux.txt'},
-    {'cpu': 'EPYC 9534',    'core': 'Genoa',        'frequency': 3.70, 'file': 'amd-epyc-9534-linux.txt'},
-    {'cpu': 'Rasp. Pi 3',   'core': 'Cortex A53',   'frequency': 1.20, 'file': 'arm-rpi3-cortex-a53-linux.txt'},
-    {'cpu': 'Rasp. Pi 4',   'core': 'Cortex A72',   'frequency': 1.80, 'file': 'arm-rpi4-cortex-a72-linux.txt'},
-    {'cpu': 'Ampere Altra', 'core': 'Neoverse N1',  'frequency': 3.00, 'file': 'arm-ampere-neoverse-n1-30-linux.txt'},
-    {'cpu': 'Ampere Altra', 'core': 'Neoverse N1',  'frequency': 3.30, 'file': 'arm-ampere-neoverse-n1-33-linux.txt'},
-    {'cpu': 'Cobalt 100',   'core': 'Neoverse N2',  'frequency': 3.40, 'file': 'arm-cobalt100-neoverse-n2-linux.txt'},
-    {'cpu': 'Graviton 3',   'core': 'Neoverse V1',  'frequency': 2.60, 'file': 'arm-graviton3-neoverse-v1-linux-vm.txt'},
-    {'cpu': 'Nvidia Grace', 'core': 'Neoverse V2',  'frequency': 3.30, 'file': 'arm-grace-neoverse-v2-linux.txt'},
-    {'cpu': 'Apple M1',     'core': 'M1',           'frequency': 3.20, 'file': 'arm-apple-m1-macos.txt'},
-    {'cpu': 'Apple M2',     'core': 'M2',           'frequency': 3.49, 'file': 'arm-apple-m2-macos.txt'},
-    {'cpu': 'Apple M3',     'core': 'M3',           'frequency': 4.05, 'file': 'arm-apple-m3-macos.txt'},
-    {'cpu': 'Apple M4',     'core': 'M4',           'frequency': 4.40, 'file': 'arm-apple-m4-macos.txt'}
+    {'cpu': 'i7-8565U',     'core': 'Whiskey Lake',  'frequency': 4.20, 'file': 'intel-i7-8565U-linux-vm.txt'},
+    {'cpu': 'i7-13700H',    'core': 'Raptor Lake',   'frequency': 5.00, 'file': 'intel-i7-13700H-linux-vm.txt'},
+    {'cpu': 'Ryzen 7 350',  'core': 'Krackan Point', 'frequency': 4.43, 'file': 'amd-ryzen-ai-7-350-linux-vm.txt'},
+    {'cpu': 'Xeon G6242R',  'core': 'Cascade Lake',  'frequency': 3.10, 'file': 'intel-xeon-gold-6242r-linux.txt'},
+    {'cpu': 'Xeon G6348',   'core': 'Ice Lake',      'frequency': 2.60, 'file': 'intel-xeon-gold-6348-linux.txt'},
+    {'cpu': 'Xeon M9460',   'core': 'Sapphire Rpd',  'frequency': 3.50, 'file': 'intel-xeon-max-9460-linux.txt'},
+    {'cpu': 'EPYC 7543P',   'core': 'Milan',         'frequency': 3.70, 'file': 'amd-epyc-7543p-linux.txt'},
+    {'cpu': 'EPYC 9534',    'core': 'Genoa',         'frequency': 3.70, 'file': 'amd-epyc-9534-linux.txt'},
+    {'cpu': 'Rasp. Pi 3',   'core': 'Cortex A53',    'frequency': 1.20, 'file': 'arm-rpi3-cortex-a53-linux.txt'},
+    {'cpu': 'Rasp. Pi 4',   'core': 'Cortex A72',    'frequency': 1.80, 'file': 'arm-rpi4-cortex-a72-linux.txt'},
+    {'cpu': 'Ampere Altra', 'core': 'Neoverse N1',   'frequency': 3.00, 'file': 'arm-ampere-neoverse-n1-30-linux.txt'},
+    {'cpu': 'Ampere Altra', 'core': 'Neoverse N1',   'frequency': 3.30, 'file': 'arm-ampere-neoverse-n1-33-linux.txt'},
+    {'cpu': 'Cobalt 100',   'core': 'Neoverse N2',   'frequency': 3.40, 'file': 'arm-cobalt100-neoverse-n2-linux.txt'},
+    {'cpu': 'Graviton 3',   'core': 'Neoverse V1',   'frequency': 2.60, 'file': 'arm-graviton3-neoverse-v1-linux-vm.txt'},
+    {'cpu': 'Nvidia Grace', 'core': 'Neoverse V2',   'frequency': 3.30, 'file': 'arm-grace-neoverse-v2-linux.txt'},
+    {'cpu': 'Apple M1',     'core': 'M1',            'frequency': 3.20, 'file': 'arm-apple-m1-macos.txt'},
+    {'cpu': 'Apple M2',     'core': 'M2',            'frequency': 3.49, 'file': 'arm-apple-m2-macos.txt'},
+    {'cpu': 'Apple M3',     'core': 'M3',            'frequency': 4.05, 'file': 'arm-apple-m3-macos.txt'},
+    {'cpu': 'Apple M4',     'core': 'M4',            'frequency': 4.40, 'file': 'arm-apple-m4-macos.txt'}
 ]
 
 #
