@@ -15,6 +15,7 @@ import re, os, sys, pprint
 RESULTS = [
     {'cpu': 'i7-8565U',     'core': 'Whiskey Lake', 'frequency': 4.20, 'file': 'intel-i7-8565U-linux-vm.txt'},
     {'cpu': 'i7-13700H',    'core': 'Raptor Lake',  'frequency': 5.00, 'file': 'intel-i7-13700H-linux-vm.txt'},
+    {'cpu': 'Ryzen 7 350',  'core': 'Kraken Point', 'frequency': 5.00, 'file': 'amd-ryzen-ai-7-350-linux-vm.txt'},
     {'cpu': 'Xeon G6242R',  'core': 'Cascade Lake', 'frequency': 3.10, 'file': 'intel-xeon-gold-6242r-linux.txt'},
     {'cpu': 'Xeon G6348',   'core': 'Ice Lake',     'frequency': 2.60, 'file': 'intel-xeon-gold-6348-linux.txt'},
     {'cpu': 'Xeon M9460',   'core': 'Sapphire Rpd', 'frequency': 3.50, 'file': 'intel-xeon-max-9460-linux.txt'},
