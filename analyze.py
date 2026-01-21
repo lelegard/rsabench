@@ -43,7 +43,7 @@ SEPARATOR = '   '
 #
 # With asymmetric crypto, we count the number of "operations" (encrypt, decrypt, sign,
 # verify) per second. The input data size is not important because the input data are
-# always padded to th ekey size. Because the load can be heavy, we count the number of
+# always padded to the key size. Because the load can be heavy, we count the number of
 # operations per REF_SECONDS and per REF_CYCLES.
 #
 REF_SECONDS = 1
@@ -51,9 +51,11 @@ REF_CYCLES  = 1000000000
 
 #
 # Names of cryptographic operations, names of values to display.
+# List values for which "lower is better". By default, "higher is better".
 #
 OP_NAMES    = ['oaep-encrypt', 'oaep-decrypt', 'pss-sign', 'pss-verify']
-VALUE_NAMES = ['oprate', 'opcycle']
+VALUE_NAMES = ['oprate', 'opcycle', 'cycles']
+LOWER_IS_BETTER = {'cycles': True}
 
 ##
 # Format a float for display.
@@ -127,11 +129,14 @@ def load_results(results, input_dir):
                         count = float(line[1])
                         oprate = (REF_SECONDS * 1000000 * count) / microsec
                         opcycle = (REF_CYCLES * count) / (1000 * microsec * res['frequency'])
+                        cycles = (1000 * microsec * res['frequency']) / count if count > 0.0 else 0.0
                         data = res['data'][algo][op]
                         data['oprate']['value'] = oprate
                         data['oprate']['string'] = format_num(oprate)
                         data['opcycle']['value'] = opcycle
                         data['opcycle']['string'] = format_num(opcycle)
+                        data['cycles']['value'] = cycles
+                        data['cycles']['string'] = format_num(cycles)
 
     # Remove operations without results (eg. sign with KEM algo).
     for algo in algos:
@@ -162,7 +167,7 @@ def load_results(results, input_dir):
             for value in VALUE_NAMES:
                 dlist = [(res['index'], res['data'][algo][op][value]['value'])
                          for res in results if op in res['data'][algo] and res['data'][algo][op][value]['value'] > 0]
-                dlist.sort(key=lambda x: x[1], reverse=True)
+                dlist.sort(key=lambda x: x[1], reverse=value not in LOWER_IS_BETTER or not LOWER_IS_BETTER[value])
                 for rank in range(len(dlist)):
                     res = next(r for r in results if r['index'] == dlist[rank][0])
                     res['data'][algo][op][value]['rank'] = rank + 1
@@ -251,6 +256,10 @@ def display_tables(results, algos, headers, file, colsep=SEPARATOR):
     print('CRYPTOGRAPHIC OPERATIONS PER %s' % unit, file=file)
     print('', file=file)
     display_one_table(results, algos, headers, 'opcycle', file, colsep)
+    print('', file=file)
+    print('CYCLES PER CRYPTOGRAPHIC OPERATION', file=file)
+    print('', file=file)
+    display_one_table(results, algos, headers, 'cycles', file, colsep)
 
 #
 # Main code.
