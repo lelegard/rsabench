@@ -10,6 +10,7 @@ Note: this project is part of a series of cryptographic benchmarks:
 - [aesbench](https://github.com/lelegard/aesbench) for AES
 - [shabench](https://github.com/lelegard/shabench) for SHA-x hash functions
 - [rsabench](https://github.com/lelegard/rsabench) for RSA
+- [eccbench](https://github.com/lelegard/rsabench) for ECC (signature only)
 - [pqcbench](https://github.com/lelegard/pqcbench) for PQC (ML-KEM, ML-DSA, SLH-DSA)
 
 ## Performance results
